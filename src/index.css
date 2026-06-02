@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(9, 9, 11, 0.4);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(63, 63, 70, 0.6);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(82, 82, 91, 0.8);
+}
+
+/* Base pulse styles */
+.pulse-glow {
+  animation: visual-pulse 2s infinite alternate;
+}
+
+@keyframes visual-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Light Mode Exquisite Styling Overrides */
+.light-mode {
+  --bg-app: #f4f5f7;
+  background-color: #f4f5f7 !important;
+}
+
+.light-mode body {
+  background-color: #f4f5f7 !important;
+  color: #111827 !important;
+}
+
+/* Basic backgrounds of containers */
+.light-mode .bg-zinc-950,
+.light-mode .bg-black,
+.light-mode #main_workspace,
+.light-mode .bg-gradient-to-t {
+  background-color: #f4f5f7 !important;
+  background-image: none !important;
+}
+
+/* Surface backgrounds (cards, sidebar, menus, header) */
+.light-mode header,
+.light-mode .bg-\[\#030303\],
+.light-mode .bg-\[\#050505\],
+.light-mode .bg-\[\#060606\],
+.light-mode .bg-\[\#080808\],
+.light-mode .bg-\[\#0A0A0A\],
+.light-mode .bg-zinc-900\/60,
+.light-mode .bg-zinc-90 w-\[280px\],
+.light-mode .bg-zinc-950\/80,
+.light-mode .bg-zinc-900 {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+/* Sidebar and active menu elements */
+.light-mode .border-r {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.light-mode .border-white\/10,
+.light-mode .border-white\/5,
+.light-mode .border-white\/20,
+.light-mode .border-zinc-800 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Inputs & Form Fields */
+.light-mode input,
+.light-mode textarea,
+.light-mode select {
+  background-color: #f9fafb !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #111827 !important;
+}
+
+.light-mode input:focus,
+.light-mode textarea:focus,
+.light-mode select:focus {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15) !important;
+}
+
+.light-mode input::placeholder,
+.light-mode textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Text Overrides - Contrast & Colors */
+.light-mode .text-white,
+.light-mode .text-zinc-100,
+.light-mode .text-zinc-200,
+.light-mode .text-zinc-300 {
+  color: #111827 !important;
+}
+
+.light-mode .text-zinc-400,
+.light-mode .text-zinc-500 {
+  color: #4b5563 !important;
+}
+
+.light-mode .text-white\/40,
+.light-mode .text-white\/20,
+.light-mode .text-white\/25,
+.light-mode .text-zinc-600 {
+  color: #6b7280 !important;
+}
+
+/* Chat bubble styling overrides */
+.light-mode .bg-white\/10 {
+  background-color: #e5e7eb !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #111827 !important;
+}
+
+.light-mode .bg-white\/5 {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #111827 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
+}
+
+.light-mode .text-cyan-400 {
+  color: #0891b2 !important;
+}
+
+.light-mode .border-cyan-400\/30 {
+  border-color: rgba(8, 145, 178, 0.25) !important;
+}
+
+/* Button & Icons Adaptive Styling */
+.light-mode .hover\:bg-white\/5:hover,
+.light-mode .hover\:bg-white\/10:hover,
+.light-mode .hover\:bg-zinc-800:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .bg-white {
+  background-color: #111827 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .text-black {
+  color: #ffffff !important;
+}
+
+.light-mode select option {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+/* Modal and VOIP overlays adaptivity */
+.light-mode .bg-black\/60,
+.light-mode .bg-black\/80 {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.light-mode .shadow-inner {
+  box-shadow: none !important;
+}
+

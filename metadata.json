@@ -1,0 +1,6 @@
+{
+  "name": "Benim AI",
+  "description": "Sesli ve görsel konuşma, gelişmiş kamera ve asistan desteği, sınırsız yüksek çözünürlüklü sanatsal görsel üretimi sunan, Ali, Can, Selin ve Ebru ses seçenekleriyle kişiselleştirilebilir bilge yapay zeka asistanı.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

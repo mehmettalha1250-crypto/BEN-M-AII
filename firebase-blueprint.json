@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about the registered user, including active settings and birthdate age checks.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user ID directly matching their authentication." },
+        "email": { "type": "string", "description": "User email address." },
+        "displayName": { "type": "string", "description": "Name or username." },
+        "birthdate": { "type": "string", "description": "ISO format date of birth." },
+        "age": { "type": "integer", "description": "Calculated age of the user." },
+        "selectedVoice": { "type": "string", "description": "Voice selection from Puck, Charon, Kore, Fenrir, Zephyr." },
+        "curseMode": { "type": "boolean", "description": "Whether the user allows AI to mildly curse if requested." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the profile was initialized." }
+      },
+      "required": ["uid", "email", "birthdate", "age", "createdAt"]
+    },
+    "Chat": {
+      "title": "Chat Topic",
+      "description": "Conversation topic metadata containing information about a chat session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique chat ID." },
+        "userId": { "type": "string", "description": "Owner userId." },
+        "title": { "type": "string", "description": "Title or summary of the chat." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["id", "userId", "title", "createdAt"]
+    },
+    "Message": {
+      "title": "Chat Message",
+      "description": "Individual messages that are sent by the user or the assistant inside a chat session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Message ID." },
+        "sender": { "type": "string", "enum": ["user", "ai"], "description": "Who sent this message." },
+        "text": { "type": "string", "description": "Message content text." },
+        "imageUrl": { "type": "string", "description": "Optional attached or processed image URL." },
+        "audioUrl": { "type": "string", "description": "Optional speech narration audio URL." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["id", "sender", "text", "createdAt"]
+    },
+    "Generation": {
+      "title": "Generated Asset",
+      "description": "Log of AI image and video generations used for enforcing daily limit values and gallery items.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique asset ID." },
+        "userId": { "type": "string", "description": "Owner userId." },
+        "type": { "type": "string", "enum": ["image", "video"], "description": "Asset type." },
+        "prompt": { "type": "string", "description": "The description prompt entered by the user." },
+        "url": { "type": "string", "description": "Accessible URL of the image/video visual asset." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["id", "userId", "type", "prompt", "url", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Collection storing the active user profiles."
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Collection storing user chat metadata entries."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Subcollection under chats comprising the conversational log."
+    },
+    "/generations/{generationId}": {
+      "schema": "Generation",
+      "description": "Collection storing logged images & videos produced."
+    }
+  }
+}
