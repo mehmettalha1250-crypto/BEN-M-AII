@@ -244,6 +244,45 @@ export default function App() {
     }
   };
 
+  const handleSkipSignIn = async () => {
+    try {
+      setAuthLoading(true);
+      // Generate standard persistent guest UID
+      let guestUid = localStorage.getItem('benimai_guest_uid');
+      if (!guestUid) {
+        guestUid = `guest_${Math.random().toString(36).substring(2, 11)}`;
+        localStorage.setItem('benimai_guest_uid', guestUid);
+      }
+      const mockUser = {
+        uid: guestUid,
+        email: 'misafir@benimai.com',
+        displayName: 'Misafir Kullanıcı',
+      };
+      localStorage.setItem('benimai_mock_auth_user', JSON.stringify(mockUser));
+
+      let profile = await fetchUserProfile(mockUser.uid);
+      if (!profile) {
+        profile = {
+          uid: mockUser.uid,
+          email: mockUser.email,
+          displayName: mockUser.displayName,
+          birthdate: '2005-01-01',
+          age: 21,
+          selectedVoice: 'Selin',
+          curseMode: false,
+          createdAt: new Date().toISOString()
+        };
+        await storeUserProfile(profile);
+      }
+      setUserProfile(profile);
+      await loadUserData(profile);
+    } catch (e: any) {
+      alert("Giriş atlanırken hata oluştu: " + e.message);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
   const handleSignOut = async () => {
     stopSpeaking();
     try {
@@ -844,7 +883,7 @@ export default function App() {
           <div className="space-y-3 pt-4">
             <button
               onClick={handleGoogleSignIn}
-              className="w-full py-4 bg-white text-black hover:bg-cyan-400 transition-all text-xs font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg hover:shadow-cyan-400/10 rounded-none shadow-md"
+              className="w-full py-4 bg-white text-black hover:bg-cyan-400 transition-all text-xs font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg hover:shadow-cyan-400/10 rounded-none shadow-md cursor-pointer"
               id="btn_google_sign_in"
             >
               <Chrome className="w-4 h-4" />
@@ -853,6 +892,20 @@ export default function App() {
             <p className="text-[8px] text-white/25 leading-normal tracking-wide uppercase font-mono">
               Güvenli Google Kimlik Doğrulama modülü. Hesap verileriniz uçtan uca şifrelenir ve korunur.
             </p>
+
+            <div className="relative py-2 flex items-center justify-center">
+              <span className="w-full border-t border-white/5 absolute"></span>
+              <span className="bg-[#060606] px-3 text-[8px] text-zinc-500 font-mono tracking-widest uppercase z-10">VEYA</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSkipSignIn}
+              className="w-full py-3 bg-white/5 text-zinc-300 hover:text-white hover:bg-cyan-950/30 hover:border-cyan-400/50 border border-white/10 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 rounded-none cursor-pointer"
+              id="btn_skip_sign_in"
+            >
+              <span>GİRİŞİ ATLA (MİSAFİR OLARAK BAŞLA)</span>
+            </button>
           </div>
         </div>
       </div>

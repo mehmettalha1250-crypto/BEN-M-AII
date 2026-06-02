@@ -4,8 +4,18 @@
  */
 
 import { doc, getDoc, setDoc, deleteDoc, collection, getDocs, query, orderBy, where, addDoc } from 'firebase/firestore';
-import { db, isFirebaseConnected, handleFirestoreError, OperationType } from '../firebase';
+import { db, isFirebaseConnected, handleFirestoreError, OperationType, auth } from '../firebase';
 import { UserProfile, Chat, Message, Generation, DailyLimit } from '../types';
+
+// Helper to determine if the user is a guest (unauthenticated via Firebase Auth)
+function isGuestUser(userId?: string): boolean {
+  if (userId && userId.startsWith('guest_')) return true;
+  if (typeof window !== 'undefined') {
+    const mockUser = localStorage.getItem('benimai_mock_auth_user');
+    if (mockUser) return true;
+  }
+  return !auth || !auth.currentUser;
+}
 
 // Helper to determine active date key for checking daily limits (YYYY-MM-DD)
 function getTodayDateString(): string {
@@ -59,7 +69,7 @@ export const PREMADE_GALLERY: Generation[] = [
 ];
 
 export async function storeUserProfile(profile: UserProfile): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(profile.uid)) {
     const path = `users/${profile.uid}`;
     try {
       // Conforms to exact creation schema on firestore.rules
@@ -82,7 +92,7 @@ export async function storeUserProfile(profile: UserProfile): Promise<void> {
 }
 
 export async function fetchUserProfile(uid: string): Promise<UserProfile | null> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(uid)) {
     const path = `users/${uid}`;
     try {
       const snap = await getDoc(doc(db, 'users', uid));
@@ -110,7 +120,7 @@ export async function fetchUserProfile(uid: string): Promise<UserProfile | null>
 }
 
 export async function fetchChats(userId: string): Promise<Chat[]> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(userId)) {
     const path = 'chats';
     try {
       const q = query(
@@ -145,7 +155,7 @@ export async function fetchChats(userId: string): Promise<Chat[]> {
 }
 
 export async function storeChat(chat: Chat): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(chat.userId)) {
     const path = `chats/${chat.id}`;
     try {
       await setDoc(doc(db, 'chats', chat.id), {
@@ -168,7 +178,7 @@ export async function storeChat(chat: Chat): Promise<void> {
 }
 
 export async function removeChat(chatId: string): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser()) {
     const path = `chats/${chatId}`;
     try {
       await deleteDoc(doc(db, 'chats', chatId));
@@ -193,7 +203,7 @@ export async function removeChat(chatId: string): Promise<void> {
 }
 
 export async function fetchMessages(chatId: string): Promise<Message[]> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser()) {
     const path = `chats/${chatId}/messages`;
     try {
       const q = query(
@@ -230,7 +240,7 @@ export async function fetchMessages(chatId: string): Promise<Message[]> {
 }
 
 export async function storeMessage(msg: Message): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser()) {
     const path = `chats/${msg.chatId}/messages/${msg.id}`;
     try {
       await setDoc(doc(db, 'chats', msg.chatId, 'messages', msg.id), {
@@ -253,7 +263,7 @@ export async function storeMessage(msg: Message): Promise<void> {
 }
 
 export async function fetchGenerations(userId: string): Promise<Generation[]> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(userId)) {
     const path = 'generations';
     try {
       const q = query(
@@ -287,7 +297,7 @@ export async function fetchGenerations(userId: string): Promise<Generation[]> {
 }
 
 export async function storeGeneration(gen: Generation): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser(gen.userId)) {
     const path = `generations/${gen.id}`;
     try {
       await setDoc(doc(db, 'generations', gen.id), {
@@ -310,7 +320,7 @@ export async function storeGeneration(gen: Generation): Promise<void> {
 }
 
 export async function removeGeneration(genId: string): Promise<void> {
-  if (isFirebaseConnected && db) {
+  if (isFirebaseConnected && db && !isGuestUser()) {
     const path = `generations/${genId}`;
     try {
       await deleteDoc(doc(db, 'generations', genId));
